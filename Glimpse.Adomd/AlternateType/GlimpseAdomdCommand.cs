@@ -12,14 +12,16 @@
     {
         private readonly CommandExecutor _commandExecutor;
         private readonly IAdomdCommand _innerCommand;
-        private readonly GlimpseAdomdConnection _innerConnection;
+        private readonly IAdomdConnection _innerConnection;
+        private readonly Guid _connectionId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseAdomdCommand"/> class.
         /// </summary>
         /// <param name="command">The wrapped adomdcommand.</param>
-        /// <param name="connection">Its related glimpseadomdconnection.</param>
-        public GlimpseAdomdCommand(IAdomdCommand command, GlimpseAdomdConnection connection)
+        /// <param name="connection">The wrapped adomdconnection.</param>
+        /// <param name="connectionId">The Id of its related glimpseadomdconnection.</param>
+        public GlimpseAdomdCommand(IAdomdCommand command, IAdomdConnection connection, Guid connectionId)
         {
             if (command == null)
             {
@@ -31,6 +33,7 @@
             }
             _innerCommand = command;
             _innerConnection = connection;
+            _connectionId = connectionId;
             _commandExecutor = new CommandExecutor(this);
         }
 
@@ -44,7 +47,7 @@
         /// </summary>
         public Guid ConnectionId
         {
-            get { return _innerConnection.ConnectionId; }
+            get { return _connectionId; }
         }
 
         /// <inheritdoc />

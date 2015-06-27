@@ -31,6 +31,14 @@
         /// <param name="messagePublisher">The message publisher.</param>
         public CommandExecutor(GlimpseAdomdCommand command, ITimedMessagePublisher messagePublisher)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException("command");
+            }
+            if (messagePublisher == null)
+            {
+                throw new ArgumentNullException("messagePublisher");
+            }
             _command = command;
             _messagePublisher = messagePublisher;
         }
@@ -69,7 +77,7 @@
         private void LogCommandStart()
         {
             var parameters = new List<CommandExecutedParameter>();
-            if (_command.Parameters.Count > 0)
+            if (_command.Parameters != null && _command.Parameters.Count > 0)
             {
                 foreach (IDbDataParameter parameter in _command.Parameters)
                 {

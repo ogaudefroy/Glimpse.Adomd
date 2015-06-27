@@ -156,7 +156,7 @@
         /// <inheritdoc />
         public IAdomdCommand CreateCommand()
         {
-            return new GlimpseAdomdCommand(_innerConnection.CreateCommand(), this);
+            return new GlimpseAdomdCommand(_innerConnection.CreateCommand(), this, this.ConnectionId);
         }
 
         /// <inheritdoc />
@@ -186,7 +186,7 @@
         /// <inheritdoc />
         IDbCommand IDbConnection.CreateCommand()
         {
-            return new GlimpseAdomdCommand(_innerConnection.CreateCommand(), this);
+            return new GlimpseAdomdCommand(_innerConnection.CreateCommand(), this, this.ConnectionId);
         }
 
         /// <inheritdoc />
