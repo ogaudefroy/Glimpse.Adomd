@@ -10,7 +10,7 @@ Setup
 
  - Replace your regular AdomdConnection with GlimpseAdomdConnection
  - You can create your command by
-	 - CreateCommand method call the connection
+	 - Calling the CreateCommand method available in the connection
 	 - Instantiating a new GlimpseAdomdCommand
 
 Usage
