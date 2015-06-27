@@ -1,0 +1,21 @@
+﻿@model List<Glimpse.Adomd.Sample.Models.CubeViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@foreach (var item in Model)
+{
+    <div>@item.Analytics</div>
+    <br />
+    <div>
+        @foreach (var col in item.Column)
+        {
+            <div>
+                <span>@col.HeaderName</span>
+                <span>&nbsp;-&nbsp;</span>
+                <span>@col.FormattedValue</span>
+            </div>
+        }
+    </div>
+}

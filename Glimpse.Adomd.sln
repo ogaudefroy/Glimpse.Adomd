@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Adomd", "Glimpse.Adomd\Glimpse.Adomd.csproj", "{236B2A00-2BB5-43AE-8328-DECE9807E420}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Adomd.Sample", "Glimpse.Adomd.Sample\Glimpse.Adomd.Sample.csproj", "{04E638EF-676A-45CF-A284-91105453730C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glimpse.Adomd.Tests", "Glimpse.Adomd.Tests\Glimpse.Adomd.Tests.csproj", "{19068DD1-B1C0-4D5D-9AA8-8F935B4FA2D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{236B2A00-2BB5-43AE-8328-DECE9807E420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{236B2A00-2BB5-43AE-8328-DECE9807E420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{236B2A00-2BB5-43AE-8328-DECE9807E420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{236B2A00-2BB5-43AE-8328-DECE9807E420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E638EF-676A-45CF-A284-91105453730C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E638EF-676A-45CF-A284-91105453730C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E638EF-676A-45CF-A284-91105453730C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E638EF-676A-45CF-A284-91105453730C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19068DD1-B1C0-4D5D-9AA8-8F935B4FA2D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19068DD1-B1C0-4D5D-9AA8-8F935B4FA2D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19068DD1-B1C0-4D5D-9AA8-8F935B4FA2D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19068DD1-B1C0-4D5D-9AA8-8F935B4FA2D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
