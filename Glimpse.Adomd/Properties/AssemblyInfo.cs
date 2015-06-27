@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Glimpse.Adomd")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Glimpse support for ADOMD components")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Olivier GAUDEFROY, Arnaud DUFRANNE")]
 [assembly: AssemblyProduct("Glimpse.Adomd")]
