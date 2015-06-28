@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using Glimpse.Adomd.Messages;
-using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
-using Glimpse.Core.Tab.Assist;
-
-namespace Glimpse.Adomd.Tab
+﻿namespace Glimpse.Adomd.Tab
 {
+    using System.Linq;
     using System.Collections.Generic;
+    using Messages;
+    using Core.Extensibility;
+    using Core.Extensions;
+    using Core.Tab.Assist;
     using Model;
     using Statistics;
 
@@ -59,7 +58,7 @@ namespace Glimpse.Adomd.Tab
         {
             get
             {
-                return "http://github.com/dufrannea/glimpse.adomd";
+                return "https://github.com/ogaudefroy/Glimpse.Adomd";
             }
         }
 

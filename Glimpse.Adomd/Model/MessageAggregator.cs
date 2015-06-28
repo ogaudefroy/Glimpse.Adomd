@@ -4,8 +4,15 @@
     using System.Linq;
     using Messages;
 
+    /// <summary>
+    /// Component in charge of aggregating ADOMD messages.
+    /// </summary>
     public class MessageAggregator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageAggregator"/> class.
+        /// </summary>
+        /// <param name="messages">The messages to aggregate.</param>
         public MessageAggregator(IList<AdomdMessage> messages)
         {
             Messages = messages;
