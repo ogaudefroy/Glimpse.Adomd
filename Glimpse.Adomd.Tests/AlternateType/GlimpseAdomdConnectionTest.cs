@@ -61,7 +61,7 @@ namespace Glimpse.Adomd.Tests.AlternateType
             Assert.That(conn.ConnectionTimeout, Is.EqualTo(30));
             mockConn.VerifyGet(p => p.ConnectionTimeout, Times.Once);
         }
-        
+
         [Test]
         public void WrapsDatabase()
         {
@@ -134,7 +134,7 @@ namespace Glimpse.Adomd.Tests.AlternateType
             Assert.That(conn.ProviderVersion, Is.EqualTo("12.0"));
             mockConn.VerifyGet(p => p.ProviderVersion, Times.Once);
         }
-    
+
         [Test]
         public void WrapsServerVersion()
         {
@@ -190,7 +190,7 @@ namespace Glimpse.Adomd.Tests.AlternateType
             var cmd = conn.CreateCommand();
             Assert.That(cmd, Is.Not.Null);
             Assert.That(cmd, Is.InstanceOf<GlimpseAdomdCommand>());
-            GlimpseAdomdCommand command = (GlimpseAdomdCommand) cmd;
+            GlimpseAdomdCommand command = (GlimpseAdomdCommand)cmd;
             Assert.That(conn, Is.EqualTo(command.Connection));
             Assert.That(conn.ConnectionId, Is.EqualTo(command.ConnectionId));
             mockConn.Verify(p => p.CreateCommand(), Times.Once);
@@ -211,6 +211,75 @@ namespace Glimpse.Adomd.Tests.AlternateType
             Assert.That(conn, Is.EqualTo(command.Connection));
             Assert.That(conn.ConnectionId, Is.EqualTo(command.ConnectionId));
             mockConn.Verify(p => p.CreateCommand(), Times.Once);
+        }
+
+        [Test]
+        public void BeginTransactionReturnsWrapedTransaction()
+        {
+            var mockConn = new Mock<IAdomdConnection>();
+            mockConn.Setup(p => p.BeginTransaction()).Returns(new Mock<IDbTransaction>().Object);
+            var conn = new GlimpseAdomdConnection(mockConn.Object, new Mock<ITimedMessagePublisher>().Object);
+
+            var tx = conn.BeginTransaction();
+
+            Assert.That(tx, Is.Not.Null);
+            Assert.That(tx, Is.InstanceOf<GlimpseAdomdTransaction>());
+            Assert.That(tx.Connection, Is.EqualTo(conn));
+            mockConn.Verify(p => p.BeginTransaction(), Times.Once);
+        }
+
+        [Test]
+        public void BeginTransactionWithIsolationLevelReturnsWrapedTransaction()
+        {
+            var mockConn = new Mock<IAdomdConnection>();
+            mockConn.Setup(p => p.BeginTransaction(IsolationLevel.Chaos)).Returns(new Mock<IDbTransaction>().Object);
+            var conn = new GlimpseAdomdConnection(mockConn.Object, new Mock<ITimedMessagePublisher>().Object);
+
+            var tx = conn.BeginTransaction(IsolationLevel.Chaos);
+
+            Assert.That(tx, Is.Not.Null);
+            Assert.That(tx, Is.InstanceOf<GlimpseAdomdTransaction>());
+            Assert.That(tx.Connection, Is.EqualTo(conn));
+            mockConn.Verify(p => p.BeginTransaction(It.Is<IsolationLevel>(s => s == IsolationLevel.Chaos)), Times.Once);
+        }
+
+        [Test]
+        public void WrapsRefreshMetadata()
+        {
+            var mockConn = new Mock<IAdomdConnection>();
+            var conn = new GlimpseAdomdConnection(mockConn.Object, new Mock<ITimedMessagePublisher>().Object);
+
+            conn.RefreshMetadata();
+
+            mockConn.Verify(p => p.RefreshMetadata(), Times.Once);
+        }
+
+        [Test]
+        public void WrapsGetSchemaDataSet()
+        {
+            var mockConn = new Mock<IAdomdConnection>();
+            var conn = new GlimpseAdomdConnection(mockConn.Object, new Mock<ITimedMessagePublisher>().Object);
+            var guid = Guid.NewGuid();
+            var restrictions = new object[] {};
+            var nativeRestrictions = new AdomdRestrictionCollection();
+
+            conn.GetSchemaDataSet(guid, restrictions);
+            mockConn.Verify(p => p.GetSchemaDataSet(guid, restrictions), Times.Once);
+
+            conn.GetSchemaDataSet(guid, restrictions, true);
+            mockConn.Verify(p => p.GetSchemaDataSet(guid, restrictions, true), Times.Once);
+
+            conn.GetSchemaDataSet(guid.ToString(), nativeRestrictions);
+            mockConn.Verify(p => p.GetSchemaDataSet(guid.ToString(), nativeRestrictions), Times.Once);
+
+            conn.GetSchemaDataSet(guid.ToString(), nativeRestrictions, false);
+            mockConn.Verify(p => p.GetSchemaDataSet(guid.ToString(), nativeRestrictions, false), Times.Once);
+
+            conn.GetSchemaDataSet(guid.ToString(), "schemaNs", nativeRestrictions);
+            mockConn.Verify(p => p.GetSchemaDataSet(guid.ToString(), "schemaNs", nativeRestrictions), Times.Once);
+
+            conn.GetSchemaDataSet(guid.ToString(), "schemaNs", nativeRestrictions, false);
+            mockConn.Verify(p => p.GetSchemaDataSet(guid.ToString(), "schemaNs", nativeRestrictions, false), Times.Once);
         }
     }
 }
