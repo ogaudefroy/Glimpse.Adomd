@@ -138,13 +138,13 @@
         /// <inheritdoc />
         public IDbTransaction BeginTransaction()
         {
-            return new GlimpseAdomdTransaction(_innerConnection.BeginTransaction(), this);
+            return new GlimpseAdomdTransaction(_innerConnection.BeginTransaction(), this, this.ConnectionId);
         }
 
         /// <inheritdoc />
         public IDbTransaction BeginTransaction(IsolationLevel il)
         {
-            return new GlimpseAdomdTransaction(_innerConnection.BeginTransaction(il), this);
+            return new GlimpseAdomdTransaction(_innerConnection.BeginTransaction(il), this, this.ConnectionId);
         }
 
         /// <inheritdoc />

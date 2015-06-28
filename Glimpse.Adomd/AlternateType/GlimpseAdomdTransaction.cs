@@ -10,33 +10,55 @@
     public class GlimpseAdomdTransaction : IDbTransaction
     {
         private readonly IDbTransaction _innerTransaction;
-        private readonly GlimpseAdomdConnection _innerConnection;
+        private readonly IDbConnection _innerConnection;
+        private readonly Guid _connectionId;
         private readonly ITimedMessagePublisher _messagePublisher;
+
+        private bool _isComplete;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseAdomdTransaction"/> class.
         /// </summary>
-        /// <param name="adomdTransaction">The underlying IDbTransaction.</param>
-        /// <param name="connection">The associated GlimpseAdomdConnection.</param>
-        public GlimpseAdomdTransaction(IDbTransaction adomdTransaction, GlimpseAdomdConnection connection)
+        /// <param name="innerTransaction">The underlying IDbTransaction.</param>
+        /// <param name="connection">The associated AdomdConnection.</param>
+        /// <param name="connectionId">The connection identifier.</param>
+        public GlimpseAdomdTransaction(IDbTransaction innerTransaction, IDbConnection connection, Guid connectionId)
+            : this(innerTransaction, connection, connectionId, new TimedMessagePublisher())
         {
-            if (adomdTransaction == null)
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseAdomdTransaction"/> class.
+        /// </summary>
+        /// <param name="innerTransaction">The underlying IDbTransaction.</param>
+        /// <param name="connection">The associated AdomdConnection.</param>
+        /// <param name="connectionId">The connection identifier.</param>
+        /// <param name="messagePublisher">The message publisher.</param>
+        internal GlimpseAdomdTransaction(IDbTransaction innerTransaction, IDbConnection connection, Guid connectionId, ITimedMessagePublisher messagePublisher)
+        {
+            if (innerTransaction == null)
             {
-                throw new ArgumentNullException("adomdTransaction");
+                throw new ArgumentNullException("innerTransaction");
             }
             if (connection == null)
             {
                 throw new ArgumentNullException("connection");
             }
-            _innerTransaction = adomdTransaction;
+            if (messagePublisher == null)
+            {
+                throw new ArgumentNullException("messagePublisher");
+            }
+            _innerTransaction = innerTransaction;
             _innerConnection = connection;
-            TransactionId = Guid.NewGuid();
+            _connectionId = connectionId;
+            _messagePublisher = messagePublisher;
 
-            _messagePublisher = new TimedMessagePublisher();
+            TransactionId = Guid.NewGuid();
+            
             _messagePublisher.EmitStartMessage(
                 new TransactionBeganMessage(
-                    _innerConnection.ConnectionId, 
-                    TransactionId, 
+                    _connectionId,
+                    TransactionId,
                     _innerTransaction.IsolationLevel));
         }
 
@@ -49,9 +71,10 @@
         public void Commit()
         {
             _innerTransaction.Commit();
+            _isComplete = true;
             _messagePublisher.EmitStopMessage(
                 new TransactionCommitMessage(
-                    _innerConnection.ConnectionId, 
+                    _connectionId, 
                     TransactionId));
         }
 
@@ -73,13 +96,20 @@
             _innerTransaction.Rollback();
             _messagePublisher.EmitStopMessage(
                 new TransactionRollbackMessage(
-                    _innerConnection.ConnectionId, 
+                    _connectionId, 
                     TransactionId));
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
+            if (!_isComplete)
+            {
+                _messagePublisher.EmitStopMessage(
+                new TransactionRollbackMessage(
+                    _connectionId,
+                    TransactionId));
+            }
             _innerTransaction.Dispose();
         }
     }

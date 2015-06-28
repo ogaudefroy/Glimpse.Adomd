@@ -64,6 +64,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AlternateType\GlimpseAdomdCommandTest.cs" />
+    <Compile Include="AlternateType\GlimpseAdomdTransactionTest.cs" />
     <Compile Include="CommandExecutorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

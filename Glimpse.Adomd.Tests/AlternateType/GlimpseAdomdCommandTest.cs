@@ -11,7 +11,7 @@
     public class GlimpseAdomdCommandTest
     {
         [Test]
-        public void GlimpseAdomdCommand_NullCommand_Throws()
+        public void Constructor_NullCommand_Throws()
         {
             Assert.That(
                 () => new GlimpseAdomdCommand(null, new Mock<IAdomdConnection>().Object, Guid.NewGuid()),
@@ -19,7 +19,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_NullConnection_Throws()
+        public void Constructor_NullConnection_Throws()
         {
             Assert.That(
                 () => new GlimpseAdomdCommand(new Mock<IAdomdCommand>().Object, null, Guid.NewGuid()),
@@ -27,7 +27,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_ConnectionMatches_And_CommandIdIsSetToDefault()
+        public void Constructor_ConnectionMatches_And_CommandIdIsSetToDefault()
         {
             var connectionId = Guid.NewGuid();
             var connection = new Mock<IAdomdConnection>().Object;
@@ -40,7 +40,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsCommandText()
+        public void WrapsCommandText()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -53,7 +53,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsCommandTimeout()
+        public void WrapsCommandTimeout()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -66,7 +66,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsCommandType()
+        public void WrapsCommandType()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             mockCommand.SetupGet(p => p.CommandType).Returns(CommandType.StoredProcedure);
@@ -80,7 +80,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsConnection()
+        public void WrapsConnection()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -93,7 +93,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsParameters()
+        public void WrapsParameters()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -104,7 +104,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsTransaction()
+        public void WrapsTransaction()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -119,7 +119,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsUpdatedRowSource()
+        public void WrapsUpdatedRowSource()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -132,7 +132,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsCancel()
+        public void WrapsCancel()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -144,7 +144,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsCreateParameter()
+        public void WrapsCreateParameter()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockParameter = new Mock<IDbDataParameter>().Object;
@@ -159,7 +159,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsDispose()
+        public void WrapsDispose()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -171,7 +171,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsPrepare()
+        public void WrapsPrepare()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -183,7 +183,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsExecute()
+        public void WrapsExecute()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -196,7 +196,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsExecuteXmlReader()
+        public void WrapsExecuteXmlReader()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -209,7 +209,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsExecuteCellSet()
+        public void WrapsExecuteCellSet()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -222,7 +222,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsExecuteNonQuery()
+        public void WrapsExecuteNonQuery()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -235,7 +235,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsExecuteReader()
+        public void WrapsExecuteReader()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
@@ -251,7 +251,7 @@
         }
 
         [Test]
-        public void GlimpseAdomdCommand_WrapsExecuteScalar()
+        public void WrapsExecuteScalar()
         {
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
