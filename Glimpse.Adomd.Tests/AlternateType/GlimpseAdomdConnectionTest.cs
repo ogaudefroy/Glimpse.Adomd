@@ -281,5 +281,72 @@ namespace Glimpse.Adomd.Tests.AlternateType
             conn.GetSchemaDataSet(guid.ToString(), "schemaNs", nativeRestrictions, false);
             mockConn.Verify(p => p.GetSchemaDataSet(guid.ToString(), "schemaNs", nativeRestrictions, false), Times.Once);
         }
+
+        [Test]
+        public void WrapsOpenAndPublishesMessage()
+        {
+            var mockPublisher = new Mock<ITimedMessagePublisher>();
+            var mockConn = new Mock<IAdomdConnection>();
+            var conn = new GlimpseAdomdConnection(mockConn.Object, mockPublisher.Object);
+
+            conn.Open();
+
+            mockConn.Verify(p => p.Open(), Times.Once);
+            mockPublisher.Verify(p => p.EmitStartMessage(It.Is<ConnectionStartedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+        }
+
+        [Test]
+        public void WrapsCloseAndPublishesMessage()
+        {
+            var mockPublisher = new Mock<ITimedMessagePublisher>();
+            var mockConn = new Mock<IAdomdConnection>();
+            var conn = new GlimpseAdomdConnection(mockConn.Object, mockPublisher.Object);
+            
+            conn.Close();
+
+            mockConn.Verify(p => p.Close(), Times.Once);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+        }
+
+        [Test]
+        public void WrapsCloseEndSessionAndPublishesMessage()
+        {
+            var mockPublisher = new Mock<ITimedMessagePublisher>();
+            var mockConn = new Mock<IAdomdConnection>();
+            var conn = new GlimpseAdomdConnection(mockConn.Object, mockPublisher.Object);
+
+            conn.Close(true);
+
+            mockConn.Verify(p => p.Close(true), Times.Once);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+        }
+
+        [Test]
+        public void WrapsDisposeAndCloseIfOpenConnection()
+        {
+            var mockPublisher = new Mock<ITimedMessagePublisher>();
+            var mockConn = new Mock<IAdomdConnection>();
+            mockConn.Setup(p => p.State).Returns(ConnectionState.Open);
+            var conn = new GlimpseAdomdConnection(mockConn.Object, mockPublisher.Object);
+            
+            conn.Dispose();
+
+            mockConn.Verify(p => p.Close(), Times.Once);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+        }
+
+        [Test]
+        public void WrapsDisposeAndCloseIfNotOpenedConnection()
+        {
+            var mockPublisher = new Mock<ITimedMessagePublisher>();
+            var mockConn = new Mock<IAdomdConnection>();
+            mockConn.Setup(p => p.State).Returns(ConnectionState.Closed);
+            var conn = new GlimpseAdomdConnection(mockConn.Object, mockPublisher.Object);
+
+            conn.Dispose();
+
+            mockConn.Verify(p => p.Close(), Times.Never);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Never);
+        }
     }
 }
