@@ -13,7 +13,7 @@
     {
         private readonly IAdomdConnection _innerConnection;
         private readonly Guid _connectionId;
-        private readonly ITimedMessagePublisher _messageEmitter;
+        private readonly ITimedMessagePublisher _messagePublisher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseAdomdConnection"/> class.
@@ -38,14 +38,28 @@
         /// </summary>
         /// <param name="connection">An already wrapped adomdconnection.</param>
         public GlimpseAdomdConnection(IAdomdConnection connection)
+            : this(connection, new TimedMessagePublisher())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseAdomdConnection"/> class.
+        /// </summary>
+        /// <param name="connection">An already wrapped adomdconnection.</param>
+        /// <param name="messagePublisher">The message publisher.</param>
+        internal GlimpseAdomdConnection(IAdomdConnection connection, ITimedMessagePublisher messagePublisher)
         {
             if (connection == null)
             {
                 throw new ArgumentNullException("connection");
             }
+            if (messagePublisher == null)
+            {
+                throw new ArgumentNullException("messagePublisher");
+            }
             _innerConnection = connection;
+            _messagePublisher = messagePublisher;
             _connectionId = Guid.NewGuid();
-            _messageEmitter = new TimedMessagePublisher();
         }
 
         /// <summary>
@@ -172,14 +186,14 @@
         /// <inheritdoc />
         public void Open()
         {
-            _messageEmitter.EmitStartMessage(new ConnectionStartedMessage(_connectionId));
+            _messagePublisher.EmitStartMessage(new ConnectionStartedMessage(_connectionId));
             _innerConnection.Open();
         }
 
         /// <inheritdoc />
         public void Close()
         {
-            _messageEmitter.EmitStopMessage(new ConnectionClosedMessage(_connectionId).AsTimelineMessage("Connection: Opened", AdomdTimelineCategory.Connection));
+            _messagePublisher.EmitStopMessage(new ConnectionClosedMessage(_connectionId).AsTimelineMessage("Connection: Opened", AdomdTimelineCategory.Connection));
             _innerConnection.Close();
         }
 
@@ -192,7 +206,7 @@
         /// <inheritdoc />
         public void Close(bool endSession)
         {
-            _messageEmitter.EmitStopMessage(new ConnectionClosedMessage(_connectionId).AsTimelineMessage("Connection: Opened", AdomdTimelineCategory.Connection));
+            _messagePublisher.EmitStopMessage(new ConnectionClosedMessage(_connectionId).AsTimelineMessage("Connection: Opened", AdomdTimelineCategory.Connection));
             _innerConnection.Close(endSession);
         }
 
