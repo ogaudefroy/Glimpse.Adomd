@@ -7,5 +7,7 @@ namespace Glimpse.Adomd.Sample.Repositories
         CellSet GetResultForYear(int year);
 
         CellSet GetResultForFirstYear();
+
+        CellSet GetInternetSalesAmount();
     }
 }

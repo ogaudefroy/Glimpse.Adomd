@@ -38,5 +38,21 @@ namespace Glimpse.Adomd.Sample.Repositories
                 return cmd.ExecuteCellSet();
             }
         }
+
+        public CellSet GetInternetSalesAmount()
+        {
+            using (var conn = new GlimpseAdomdConnection(connStr))
+            {
+                conn.Open();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = @"WITH SET [EUROPE] AS '{[Customer].[Country].&[France],
+[Customer].[Country].&[Germany],
+[Customer].[Country].&[United Kingdom]}' 
+SELECT Measures.[Internet Sales Amount] ON COLUMNS,
+[EUROPE] ON ROWS
+FROM [Adventure Works];";
+                return cmd.ExecuteCellSet();
+            }
+        }
     }
 }

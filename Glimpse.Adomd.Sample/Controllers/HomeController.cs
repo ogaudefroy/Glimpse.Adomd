@@ -18,8 +18,9 @@ namespace Glimpse.Adomd.Sample.Controllers
         {
             var firstRequest = repository.GetResultForFirstYear();
             var secondRequest = repository.GetResultForYear(2012);
+            var thirdRequest = repository.GetInternetSalesAmount();
 
-            var viewModel = CubeBuilder.BuildViewModel(secondRequest);
+            var viewModel = CubeBuilder.BuildViewModel(thirdRequest);
 
             return View(viewModel);
         }
