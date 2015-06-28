@@ -1,4 +1,6 @@
-﻿using Microsoft.AnalysisServices.AdomdClient;
+﻿using System.Data;
+using System.Xml;
+using Microsoft.AnalysisServices.AdomdClient;
 
 namespace Glimpse.Adomd.Sample.Repositories
 {
@@ -9,5 +11,9 @@ namespace Glimpse.Adomd.Sample.Repositories
         CellSet GetResultForFirstYear();
 
         CellSet GetInternetSalesAmount();
+
+        DataTable TestExecuteReader();
+
+        XmlReader TestExecuteXmlReader();
     }
 }
