@@ -1,7 +1,7 @@
 ﻿namespace Glimpse.Adomd.Tests
 {
     using System;
-    using AlternateType;
+    using Adomd.AlternateType;
     using Messages;
     using Microsoft.AnalysisServices.AdomdClient;
     using Moq;

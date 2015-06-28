@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Glimpse.Adomd")]
@@ -13,3 +14,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("c00c23eb-1d3e-4f2a-a686-bd2f1834b985")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: InternalsVisibleTo("Glimpse.Adomd.Tests")]
