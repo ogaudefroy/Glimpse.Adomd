@@ -1,4 +1,6 @@
-﻿namespace Glimpse.Adomd
+﻿using Microsoft.AnalysisServices.AdomdClient;
+
+namespace Glimpse.Adomd
 {
     using System;
     using System.Collections.Generic;
@@ -50,7 +52,7 @@
         /// <param name="executor">The function to be called on the glimpse command.</param>
         /// <param name="name">Name of the function to be traced.</param>
         /// <returns>The function return value.</returns>
-        public T Execute<T>(Func<T> executor, string name)
+        public T Execute<T>(Func<IAdomdCommand, T> executor, string name)
         {
             T result;
             _command.CommandId = Guid.NewGuid();
@@ -58,7 +60,7 @@
 
             try
             {
-                result = executor();
+                result = executor(_command.InnerCommand);
             }
             catch (Exception exception)
             {

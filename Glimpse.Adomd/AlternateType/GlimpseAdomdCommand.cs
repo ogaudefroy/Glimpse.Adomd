@@ -98,6 +98,11 @@
             set { _innerCommand.UpdatedRowSource = value; }
         }
 
+        internal IAdomdCommand InnerCommand
+        {
+            get { return _innerCommand; }
+        }
+
         /// <inheritdoc />
         public void Cancel()
         {
@@ -119,43 +124,43 @@
         /// <inheritdoc />
         public object Execute()
         {
-            return _commandExecutor.Execute(_innerCommand.Execute, "Execute");
+            return _commandExecutor.Execute((p => p.Execute()), "Execute");
         }
 
         /// <inheritdoc />
         public XmlReader ExecuteXmlReader()
         {
-            return _commandExecutor.Execute(_innerCommand.ExecuteXmlReader, "ExecuteXmlReader");
+            return _commandExecutor.Execute(p => p.ExecuteXmlReader(), "ExecuteXmlReader");
         }
 
         /// <inheritdoc />
         public CellSet ExecuteCellSet()
         {
-            return _commandExecutor.Execute(_innerCommand.ExecuteCellSet, "ExecuteCellSet");
+            return _commandExecutor.Execute(p => p.ExecuteCellSet(), "ExecuteCellSet");
         }
 
         /// <inheritdoc />
         public int ExecuteNonQuery()
         {
-            return _commandExecutor.Execute(_innerCommand.ExecuteNonQuery, "ExecuteNonQuery");
+            return _commandExecutor.Execute(p => p.ExecuteNonQuery(), "ExecuteNonQuery");
         }
 
         /// <inheritdoc />
         public IDataReader ExecuteReader()
         {
-            return _commandExecutor.Execute(_innerCommand.ExecuteReader, "ExecuteReader");
+            return _commandExecutor.Execute(p => p.ExecuteReader(), "ExecuteReader");
         }
 
         /// <inheritdoc />
         public IDataReader ExecuteReader(CommandBehavior behavior)
         {
-            return _commandExecutor.Execute(() => _innerCommand.ExecuteReader(behavior), "ExecuteReader");
+            return _commandExecutor.Execute(p => p.ExecuteReader(behavior), "ExecuteReader");
         }
 
         /// <inheritdoc />
         public object ExecuteScalar()
         {
-            return _commandExecutor.Execute(_innerCommand.ExecuteScalar, "ExecuteScalar");
+            return _commandExecutor.Execute(p => p.ExecuteScalar(), "ExecuteScalar");
         }
 
         /// <inheritdoc />

@@ -32,13 +32,15 @@
         public void CommandExecutor_ExecuteNormalCallEmitsStartAndStopMessages()
         {
             var mockCommand = new Mock<IAdomdCommand>();
+            mockCommand.Setup(p => p.Execute()).Returns(13);
+            var command = mockCommand.Object;
             var mockConnection = new Mock<IAdomdConnection>();
             var guidConnection = Guid.NewGuid();
-            var glimpseCommand = new GlimpseAdomdCommand(mockCommand.Object, mockConnection.Object, guidConnection);
+            var glimpseCommand = new GlimpseAdomdCommand(command, mockConnection.Object, guidConnection);
             var mockTimedMessagePublisher = new Mock<ITimedMessagePublisher>();
             var commandExecutor = new CommandExecutor(glimpseCommand, mockTimedMessagePublisher.Object);
 
-            var result = commandExecutor.Execute<int>(() => 13, "Execute");
+            var result = commandExecutor.Execute(c => c.Execute(), "Execute");
 
             Assert.That(result, Is.EqualTo(13));
             Assert.That(glimpseCommand.CommandId, Is.Not.Null);
