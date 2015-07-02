@@ -90,5 +90,21 @@ WHERE ([Sales Territory Country].[United States]);";
                 return cmd.ExecuteXmlReader();
             }
         }
+
+
+        public DataTable TestDmv()
+        {
+            using (var conn = new GlimpseAdomdConnection(connStr))
+            {
+                conn.Open();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "Select * from $System.discover_object_memory_usage";
+                DataSet ds = new DataSet { EnforceConstraints = false };
+                ds.Tables.Add();
+                DataTable dt = ds.Tables[0];
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
     }
 }

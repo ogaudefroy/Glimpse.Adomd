@@ -15,5 +15,7 @@ namespace Glimpse.Adomd.Sample.Repositories
         DataTable TestExecuteReader();
 
         XmlReader TestExecuteXmlReader();
+
+        DataTable TestDmv();
     }
 }

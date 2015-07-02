@@ -21,6 +21,7 @@ namespace Glimpse.Adomd.Sample.Controllers
             var thirdRequest = repository.GetInternetSalesAmount();
             var fourthRequest = repository.TestExecuteReader();
             var fifthRequest = repository.TestExecuteXmlReader();
+            var dmvQuery = repository.TestDmv();
 
             var viewModel = CubeBuilder.BuildViewModel(thirdRequest);
 
