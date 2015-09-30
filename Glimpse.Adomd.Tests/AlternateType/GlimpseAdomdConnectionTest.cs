@@ -38,6 +38,17 @@ namespace Glimpse.Adomd.Tests.AlternateType
         }
 
         [Test]
+        public void WrapsChangeDatabase()
+        {
+            var mockConn = new Mock<IAdomdConnection>();
+            mockConn.SetupProperty(p => p.ConnectionString, "TEST");
+
+            var conn = new GlimpseAdomdConnection(mockConn.Object, new Mock<ITimedMessagePublisher>().Object);
+            conn.ChangeDatabase("TEST2");
+            mockConn.Verify(p => p.ChangeDatabase(It.Is<string>(s => s == "TEST2")), Times.Once);
+        }
+
+        [Test]
         public void WrapsConnectionString()
         {
             var mockConn = new Mock<IAdomdConnection>();

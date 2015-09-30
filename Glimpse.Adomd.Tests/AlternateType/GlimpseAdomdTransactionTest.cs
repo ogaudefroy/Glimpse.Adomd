@@ -27,6 +27,14 @@
         }
 
         [Test]
+        public void Constructor_NullMessagePublisher_Throws()
+        {
+            Assert.That(
+                () => new GlimpseAdomdTransaction(new Mock<IDbTransaction>().Object, new Mock<IDbConnection>().Object, Guid.NewGuid(), null),
+                Throws.InstanceOf<ArgumentNullException>());
+        }
+
+        [Test]
         public void Constructor_SetsValuesAndEmitsStartMessage()
         {
             var mockTx = new Mock<IDbTransaction>();
