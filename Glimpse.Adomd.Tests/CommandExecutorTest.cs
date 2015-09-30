@@ -49,5 +49,26 @@
             mockTimedMessagePublisher.Verify(p => p.EmitStopMessage(
                 It.IsAny<CommandDurationAndRowCountMessage>()), Times.Once);
         }
+
+        [Test]
+        public void CommandExecutor_ExecuteWithErrorsEmitsStartsAndStopMessages()
+        {
+            var mockCommand = new Mock<IAdomdCommand>();
+            mockCommand.Setup(p => p.Execute()).Throws<NotSupportedException>();
+            var command = mockCommand.Object;
+            var mockConnection = new Mock<IAdomdConnection>();
+            var guidConnection = Guid.NewGuid();
+            var glimpseCommand = new GlimpseAdomdCommand(command, mockConnection.Object, guidConnection);
+            var mockTimedMessagePublisher = new Mock<ITimedMessagePublisher>();
+            var commandExecutor = new CommandExecutor(glimpseCommand, mockTimedMessagePublisher.Object);
+
+            Assert.That(() => commandExecutor.Execute(c => c.Execute(), "Execute"), Throws.InstanceOf<NotSupportedException>());
+            
+            Assert.That(glimpseCommand.CommandId, Is.Not.Null);
+            mockTimedMessagePublisher.Verify(p => p.EmitStartMessage(
+                It.IsAny<CommandExecutedMessage>()), Times.Once);
+            mockTimedMessagePublisher.Verify(p => p.EmitStopMessage(
+                It.IsAny<CommandErrorMessage>()), Times.Once);
+        }
     }
 }

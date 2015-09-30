@@ -1,12 +1,11 @@
-﻿using Microsoft.AnalysisServices.AdomdClient;
-
-namespace Glimpse.Adomd
+﻿namespace Glimpse.Adomd
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using AlternateType;
     using Messages;
+    using Microsoft.AnalysisServices.AdomdClient;
     using Core.Message;
 
     /// <summary>
