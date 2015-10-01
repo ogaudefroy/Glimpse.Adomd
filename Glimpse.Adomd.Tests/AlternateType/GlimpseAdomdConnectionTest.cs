@@ -1,8 +1,7 @@
-﻿using System.Data;
-
-namespace Glimpse.Adomd.Tests.AlternateType
+﻿namespace Glimpse.Adomd.Tests.AlternateType
 {
     using System;
+    using System.Data;
     using Adomd.AlternateType;
     using Messages;
     using Microsoft.AnalysisServices.AdomdClient;
@@ -316,7 +315,11 @@ namespace Glimpse.Adomd.Tests.AlternateType
             conn.Close();
 
             mockConn.Verify(p => p.Close(), Times.Once);
-            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(
+                s => s.ConnectionId == conn.ConnectionId 
+                && s.EventCategory == AdomdTimelineCategory.Connection
+                && s.EventName == "Connection: Opened"
+                && s.EventSubText == null)), Times.Once);
         }
 
         [Test]
@@ -329,7 +332,11 @@ namespace Glimpse.Adomd.Tests.AlternateType
             conn.Close(true);
 
             mockConn.Verify(p => p.Close(true), Times.Once);
-            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(
+                s => s.ConnectionId == conn.ConnectionId 
+                && s.EventCategory == AdomdTimelineCategory.Connection
+                && s.EventName == "Connection: Opened"
+                && s.EventSubText == null)), Times.Once);
         }
 
         [Test]
@@ -343,7 +350,11 @@ namespace Glimpse.Adomd.Tests.AlternateType
             conn.Dispose();
 
             mockConn.Verify(p => p.Close(), Times.Once);
-            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Once);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(
+                s => s.ConnectionId == conn.ConnectionId
+                && s.EventCategory == AdomdTimelineCategory.Connection
+                && s.EventName == "Connection: Opened"
+                && s.EventSubText == null)), Times.Once);
         }
 
         [Test]
@@ -357,7 +368,11 @@ namespace Glimpse.Adomd.Tests.AlternateType
             conn.Dispose();
 
             mockConn.Verify(p => p.Close(), Times.Never);
-            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(s => s.ConnectionId == conn.ConnectionId)), Times.Never);
+            mockPublisher.Verify(p => p.EmitStopMessage(It.Is<ConnectionClosedMessage>(
+                s => s.ConnectionId == conn.ConnectionId
+                && s.EventCategory == AdomdTimelineCategory.Connection
+                && s.EventName == "Connection: Opened"
+                && s.EventSubText == null)), Times.Never);
         }
     }
 }

@@ -55,12 +55,11 @@
     <Compile Include="AlternateType\GlimpseAdomdConnection.cs" />
     <Compile Include="AlternateType\GlimpseAdomdTransaction.cs" />
     <Compile Include="Messages\AdomdTimelineCategory.cs" />
-    <Compile Include="Messages\CommandDurationAndRowCountMessage.cs" />
+    <Compile Include="Messages\CommandDurationMessage.cs" />
     <Compile Include="Messages\CommandErrorMessage.cs" />
     <Compile Include="Messages\CommandExecutedParameter.cs" />
     <Compile Include="Messages\AdomdTransactionMessage.cs" />
     <Compile Include="Messages\CommandExecutedMessage.cs" />
-    <Compile Include="Messages\CommandRowCountMessage.cs" />
     <Compile Include="Messages\ConnectionClosedMessage.cs" />
     <Compile Include="Messages\ConnectionStartedMessage.cs" />
     <Compile Include="Messages\ITimedMessagePublisher.cs" />

@@ -14,7 +14,7 @@
         public void CommandExecutor_NullCommand_Throws()
         {
             Assert.That(
-                () => new CommandExecutor(null), 
+                () => new CommandExecutor(null),
                 Throws.InstanceOf<ArgumentNullException>());
         }
 
@@ -24,7 +24,7 @@
             var mockCommand = new Mock<IAdomdCommand>();
             var mockConnection = new Mock<IAdomdConnection>();
             Assert.That(
-                () => new CommandExecutor(new GlimpseAdomdCommand(mockCommand.Object, mockConnection.Object, Guid.NewGuid()), null), 
+                () => new CommandExecutor(new GlimpseAdomdCommand(mockCommand.Object, mockConnection.Object, Guid.NewGuid()), null),
                 Throws.InstanceOf<ArgumentNullException>());
         }
 
@@ -33,10 +33,14 @@
         {
             var mockCommand = new Mock<IAdomdCommand>();
             mockCommand.Setup(p => p.Execute()).Returns(13);
+            mockCommand.SetupAllProperties();
             var command = mockCommand.Object;
             var mockConnection = new Mock<IAdomdConnection>();
             var guidConnection = Guid.NewGuid();
-            var glimpseCommand = new GlimpseAdomdCommand(command, mockConnection.Object, guidConnection);
+            var glimpseCommand = new GlimpseAdomdCommand(command, mockConnection.Object, guidConnection)
+            {
+                CommandText = "ABC"
+            };
             var mockTimedMessagePublisher = new Mock<ITimedMessagePublisher>();
             var commandExecutor = new CommandExecutor(glimpseCommand, mockTimedMessagePublisher.Object);
 
@@ -45,9 +49,21 @@
             Assert.That(result, Is.EqualTo(13));
             Assert.That(glimpseCommand.CommandId, Is.Not.Null);
             mockTimedMessagePublisher.Verify(p => p.EmitStartMessage(
-                It.IsAny<CommandExecutedMessage>()), Times.Once);
+                It.Is<CommandExecutedMessage>(c =>
+                    c.CommandId == glimpseCommand.CommandId
+                    && c.ConnectionId == guidConnection
+                    && c.CommandText == "ABC"
+                    && c.HasTransaction == false
+                    && c.IsAsync == false
+                )), Times.Once);
             mockTimedMessagePublisher.Verify(p => p.EmitStopMessage(
-                It.IsAny<CommandDurationAndRowCountMessage>()), Times.Once);
+                It.Is<CommandDurationMessage>(c =>
+                    c.CommandId == glimpseCommand.CommandId
+                    && c.ConnectionId == guidConnection
+                    && c.EventCategory == AdomdTimelineCategory.Command
+                    && c.EventName == "Command: Executed"
+                    && c.EventSubText == "Execute"
+                    && c.IsAsync == false)), Times.Once);
         }
 
         [Test]
@@ -55,20 +71,37 @@
         {
             var mockCommand = new Mock<IAdomdCommand>();
             mockCommand.Setup(p => p.Execute()).Throws<NotSupportedException>();
+            mockCommand.SetupAllProperties();
             var command = mockCommand.Object;
             var mockConnection = new Mock<IAdomdConnection>();
             var guidConnection = Guid.NewGuid();
-            var glimpseCommand = new GlimpseAdomdCommand(command, mockConnection.Object, guidConnection);
+            var glimpseCommand = new GlimpseAdomdCommand(command, mockConnection.Object, guidConnection)
+                                    {
+                                        CommandText = "ABC"
+                                    };
             var mockTimedMessagePublisher = new Mock<ITimedMessagePublisher>();
             var commandExecutor = new CommandExecutor(glimpseCommand, mockTimedMessagePublisher.Object);
 
             Assert.That(() => commandExecutor.Execute(c => c.Execute(), "Execute"), Throws.InstanceOf<NotSupportedException>());
-            
+
             Assert.That(glimpseCommand.CommandId, Is.Not.Null);
             mockTimedMessagePublisher.Verify(p => p.EmitStartMessage(
-                It.IsAny<CommandExecutedMessage>()), Times.Once);
+                It.Is<CommandExecutedMessage>(c =>
+                    c.CommandId == glimpseCommand.CommandId
+                    && c.ConnectionId == guidConnection
+                    && c.CommandText == "ABC"
+                    && c.HasTransaction == false
+                    && c.IsAsync == false
+                )), Times.Once);
             mockTimedMessagePublisher.Verify(p => p.EmitStopMessage(
-                It.IsAny<CommandErrorMessage>()), Times.Once);
+                It.Is<CommandErrorMessage>(c =>
+                    c.CommandId == glimpseCommand.CommandId
+                    && c.ConnectionId == guidConnection
+                    && c.Exception != null && c.Exception.GetType() == typeof(NotSupportedException)
+                    && c.EventCategory == AdomdTimelineCategory.Command
+                    && c.EventName == "Command: Error"
+                    && c.EventSubText == "Execute"
+                    && c.IsAsync == false)), Times.Once);
         }
     }
 }

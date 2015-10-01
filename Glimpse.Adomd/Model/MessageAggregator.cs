@@ -31,23 +31,12 @@
             AggregateCommandErrors();
             AggregateCommandDurations();
             AggregateCommandExecuted();
-            AggregateCommandRowCounts();
             AggregateTransactionBegan();
             AggregateTransactionEnd();
 
             return Metadata;
         }
-
-        private void AggregateCommandRowCounts()
-        {
-            var messages = Messages.OfType<CommandRowCountMessage>();
-            foreach (var message in messages)
-            {
-                var command = GetOrCreateCommandFor(message);
-                command.TotalRecords = message.RowCount;
-            }
-        }
-
+        
         private void AggregateCommandExecuted()
         {
             var messages = Messages.OfType<CommandExecutedMessage>();
@@ -76,12 +65,11 @@
 
         private void AggregateCommandDurations()
         {
-            var messages = Messages.OfType<CommandDurationAndRowCountMessage>();
+            var messages = Messages.OfType<CommandDurationMessage>();
             foreach (var message in messages)
             {
                 var command = GetOrCreateCommandFor(message);
                 command.Duration = message.Duration;
-                command.RecordsAffected = message.RecordsAffected;
                 command.StartDateTime = message.StartTime; // Reason we set it again is we now have a better time than the start
                 command.EndDateTime = message.StartTime + message.Offset;
                 command.Offset = message.Offset;

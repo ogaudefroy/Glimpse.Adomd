@@ -95,14 +95,14 @@
 
         /// <summary>
         /// Handles command end execution.
-        /// Publishes a CommandDurationAndRowCountMessage.
+        /// Publishes a CommandDurationMessage.
         /// </summary>
         /// <param name="recordsAffected">The number of records affected.</param>
         /// <param name="name">The method name.</param>
         private void LogCommandEnd(int? recordsAffected, string name)
         {
             _messagePublisher.EmitStopMessage(
-                new CommandDurationAndRowCountMessage(
+                new CommandDurationMessage(
                     _command.ConnectionId, 
                     _command.CommandId, 
                     recordsAffected).AsTimelineMessage("Command: Executed", AdomdTimelineCategory.Command, name));
