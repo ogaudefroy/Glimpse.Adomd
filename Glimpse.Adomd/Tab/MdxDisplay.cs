@@ -27,26 +27,25 @@
                     TabLayout.Create().Row(r =>
                         {
                             r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
-                                x.Cell(0).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                                x.Cell(0).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                                 {
                                     y.Cell(0).WidthInPixels(165);
                                     y.Cell(1);
                                 }))).Row(x =>
                                 {
                                     x.Cell(1).WidthInPixels(55);
-                                    x.Cell(2).AsCode(CodeType.Sql).DisablePreview();
-                                    x.Cell(3).WidthInPercent(25).DisablePreview();
-                                    x.Cell(4).WidthInPixels(60);
-                                    x.Cell(5).WidthInPixels(85).Suffix(" ms").Class("mono");
-                                    x.Cell(6).WidthInPixels(95).Prefix("T+ ").Suffix(" ms").Class("mono");
-                                    x.Cell(7).WidthInPixels(45);
+                                    x.Cell(2).AsCode(CodeType.Sql).DisablePreview(); // MDX
+                                    x.Cell(3).WidthInPercent(25).DisablePreview(); // Parameters
+                                    x.Cell(4).WidthInPixels(85).Suffix(" ms").Class("mono"); // Duration
+                                    x.Cell(5).WidthInPixels(95).Prefix("T+ ").Suffix(" ms").Class("mono"); // Offset 
+                                    x.Cell(6).WidthInPixels(45);
                                 }).Row(x =>
-                                x.Cell(9).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                                x.Cell(8).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                                 {
                                     y.Cell(0).WidthInPercent(20);
                                     y.Cell(1).Class("mono").DisablePreview();
                                 }))).Row(x =>
-                                x.Cell(8).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                                x.Cell(7).SpanColumns(6).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
                                 {
                                     y.Cell(0).WidthInPixels(165);
                                     y.Cell(1);
@@ -105,7 +104,7 @@
                     continue;
                 }
 
-                var commands = new List<object[]> { new object[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Records", "Duration", "Offset", "Async", "Transaction End", "Errors" } };
+                var commands = new List<object[]> { new object[] { "Transaction Start", "Ordinal", "Command", "Parameters", "Duration", "Offset", "Transaction End", "Errors" } };
                 var commandCount = 1;
                 foreach (var command in connection.Commands.Values)
                 {
@@ -152,7 +151,7 @@
                     var records = command.RecordsAffected == null || command.RecordsAffected < 0 ? command.TotalRecords : command.RecordsAffected;
 
                     var status = string.Empty;
-                    commands.Add(new object[] { headTransaction, string.Format("{0}{1}", command.HasTransaction ? "\t\t\t" : string.Empty, commandCount++), command.Command, parameters, records, command.Duration, command.Offset, false, tailTransaction, errors, status });
+                    commands.Add(new object[] { headTransaction, string.Format("{0}{1}", command.HasTransaction ? "\t\t\t" : string.Empty, commandCount++), command.Command, parameters, command.Duration, command.Offset, tailTransaction, errors, status });
                 }
 
                 connections.Add(new[] { commands, connection.Duration.HasValue ? (object)connection.Duration.Value : null });
