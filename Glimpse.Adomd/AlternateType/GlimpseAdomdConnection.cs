@@ -251,5 +251,15 @@
         {
             _innerConnection.RefreshMetadata();
         }
+
+        /// <summary>
+        /// Explicit cast on AdomdCommand.
+        /// </summary>
+        /// <param name="wrapper">The command wrapper.</param>
+        /// <returns>The inner command.</returns>
+        public static explicit operator AdomdConnection(GlimpseAdomdConnection wrapper)
+        {
+            return (AdomdConnection)(AdomdConnectionWrapper)wrapper._innerConnection;
+        }
     }
 }

@@ -168,5 +168,15 @@
         {
             _innerCommand.Prepare();
         }
+
+        /// <summary>
+        /// Explicit cast on AdomdCommand.
+        /// </summary>
+        /// <param name="wrapper">The command wrapper.</param>
+        /// <returns>The inner command.</returns>
+        public static explicit operator AdomdCommand(GlimpseAdomdCommand wrapper)
+        {
+            return (AdomdCommand)(AdomdCommandWrapper)wrapper._innerCommand;
+        }
     }
 }

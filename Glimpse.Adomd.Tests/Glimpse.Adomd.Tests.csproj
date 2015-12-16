@@ -40,8 +40,9 @@
       <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.AnalysisServices.AdomdClient.Abstractions">
-      <HintPath>..\packages\Microsoft.AnalysisServices.AdomdClient.Abstractions.1.0.7.0\lib\net45\Microsoft.AnalysisServices.AdomdClient.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.AnalysisServices.AdomdClient.Abstractions, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AnalysisServices.AdomdClient.Abstractions.1.0.9.0\lib\net45\Microsoft.AnalysisServices.AdomdClient.Abstractions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1506.2016\lib\net40\Moq.dll</HintPath>
